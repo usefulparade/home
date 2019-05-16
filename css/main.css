@@ -1,0 +1,117 @@
+@font-face {
+    font-family: "Easley";
+    src: url("/font/Easley-Regular.otf");
+}
+
+body {
+    font-family: 'Easley', Courier, monospace;
+    font-size: 22px;
+    margin: 0px;
+    color: #1f320c;
+    /* background-color: #d1e6ff; */
+    background-color: #ffe8d1;
+    /* filter: blur(0.4px); */
+}
+
+h1 {
+    display: inline-block;
+    font-weight: normal;
+    font-size: 2em;
+    margin: 0px;
+    margin-bottom: 60px;
+}
+
+h2 {
+    font-weight: normal;
+    font-size: 4em;
+    margin-top: 10px;
+}
+
+h3 {
+    display: inline-block;
+    font-weight: normal;
+    font-size: 1em;
+    margin: 0px;
+}
+
+p {
+    font-weight: normal;
+    font-size: 1em;
+}
+
+small {
+    font-size: 0.5em;
+}
+
+a {
+    background-color: rgb(228, 85, 42);
+    color: #ffe8d0;
+    text-decoration: none;
+    padding-right: 5px;
+    padding-left: 5px;
+    transition: background-color 0.2s;
+    /* filter: blur(0.5px); */
+}
+
+a:hover {
+    background-color: rgb(32, 104, 181);
+    color: #ffe8d0;
+}
+
+span {
+    display: inline-block;
+}
+
+i {
+    font-size: 2em;
+}
+
+select {
+    font-size: inherit;
+    font-family: 'Easley', Courier, monospace;
+    padding: 20px 20px;
+}
+
+#logo {
+    display: block;
+    position: fixed;
+    right: 20px;
+    bottom: 10px;
+    max-width: 80px;
+}
+
+.container {
+    display: block;
+    position: absolute;
+    box-sizing: border-box;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    padding: 3vw;
+}
+
+@media only screen and (max-width: 720px){
+    body {
+        margin-left: 3vw;
+    }
+
+    h1 {
+        font-weight: normal;
+        font-size: 1em;
+        margin: 0px;
+        margin-bottom: 15px;
+    }
+    
+    h2 {
+        font-weight: lighter;
+        font-size: 2em;
+        margin-top: 10px;
+    }
+
+    small {
+        font-size: 1em;
+    }
+}

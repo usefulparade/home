@@ -5,20 +5,20 @@
 
 :root {
     /* bg */
-    --color1: #f0e6da;
+    --color1: #f2f2f2;
     /* link */
-    --color2: #e14f35;
+    --color2: #11000f;
     /* link mouseover */
     --color3: #2068b5;
     /* text */
-    --color4: #040217;
+    --color4: #394308;
 }
 
 body {
     font-family: 'Easley', Courier, monospace;
     font-size: 22px;
     margin: 0px;
-    color: var(--color4);
+    color: var(--color2);
     background-color: var(--color1);
     /* filter: blur(0.4px); */
 }

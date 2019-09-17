@@ -3,13 +3,23 @@
     src: url("/font/Easley-Regular.otf");
 }
 
+:root {
+    /* bg */
+    --color1: #f0e6da;
+    /* link */
+    --color2: #e14f35;
+    /* link mouseover */
+    --color3: #2068b5;
+    /* text */
+    --color4: #040217;
+}
+
 body {
     font-family: 'Easley', Courier, monospace;
     font-size: 22px;
     margin: 0px;
-    color: #1f320c;
-    /* background-color: #d1e6ff; */
-    background-color: #ffe8d1;
+    color: var(--color4);
+    background-color: var(--color1);
     /* filter: blur(0.4px); */
 }
 
@@ -43,8 +53,9 @@ small {
 }
 
 a {
-    background-color: rgb(228, 85, 42);
-    color: #ffe8d0;
+    
+    color: var(--color1);
+    background-color: var(--color2);
     text-decoration: none;
     padding-right: 5px;
     padding-left: 5px;
@@ -53,8 +64,16 @@ a {
 }
 
 a:hover {
-    background-color: rgb(32, 104, 181);
-    color: #ffe8d0;
+    background-color: var(--color3);
+    color: var(--color1);
+}
+
+a img {
+    background-color: var(--color2);
+}
+
+a img:hover {
+    background-color: var(--color3);
 }
 
 span {
@@ -71,12 +90,26 @@ select {
     padding: 20px 20px;
 }
 
-#logo {
+#inline-logo {
+    display: inline-block;
+    position: relative;
+    max-width: 120px;
+}
+
+#bottom-logo {
     display: block;
     position: fixed;
     right: 20px;
     bottom: 10px;
-    max-width: 80px;
+    max-width: 120px;
+}
+
+#top-logo {
+    display: inline-block;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    max-width: 120px;
 }
 
 .container {
@@ -118,5 +151,9 @@ select {
 
     small {
         font-size: 1em;
+    }
+
+    #bottom-logo {
+        max-width: 80px;
     }
 }

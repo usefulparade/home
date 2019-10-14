@@ -5,21 +5,24 @@
 
 :root {
     /* bg */
-    --color1: #f2f2f2;
+    --color1: #eeddbe;
     /* link */
     --color2: #11000f;
     /* link mouseover */
-    --color3: #2068b5;
+    --color3: #a27e8e;
+    /* --color3: #2068b5; */
     /* text */
-    --color4: #394308;
+    --color4: #323c03;
 }
 
 body {
     font-family: 'Easley', Courier, monospace;
     font-size: 22px;
     margin: 0px;
-    color: var(--color2);
+    color: var(--color4);
     background-color: var(--color1);
+    user-select: none;
+    webkit-user-select: none;
     /* filter: blur(0.4px); */
 }
 
@@ -55,7 +58,7 @@ small {
 a {
     
     color: var(--color1);
-    background-color: var(--color2);
+    background-color: var(--color4);
     text-decoration: none;
     padding-right: 5px;
     padding-left: 5px;
@@ -69,7 +72,7 @@ a:hover {
 }
 
 a img {
-    background-color: var(--color2);
+    background-color: var(--color4);
 }
 
 a img:hover {

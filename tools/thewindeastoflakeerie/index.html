@@ -3,36 +3,36 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>The wind, east of Lake Erie</title>
-    <meta name="description" content="a design cooperative by Luke Williams and Blair Johnson">
+    <title>the wind, east of lake erie</title>
+    <meta name="description" content="a musical collaboration between you and the wind at my apartment">
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="css/wind.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
     <script src="../../js/p5.min.js"></script>
     <script src="../../js/p5.dom.min.js"></script>
     <script src="../../js/p5.sound.min.js"></script>
     <script src="js/matter.js"></script>
-    <!-- <script src="js/noise.js"></script> -->
 </head>
 
 <body onload="windUpdate();">
   <div class="container">
     <div class="title">
-      <h1>the wind, <span>east of lake erie</span></h1>
+      <!-- <h1>the wind, <span>east of lake erie</span></h1> -->
     </div>
 
-    <div class="optionsButton" onclick="optionsToggle()">
+    <div class="optionsButton" id="optionsButton" onclick="optionsToggle()">
       <p>+</p>
     </div>
 
     <div id="options" class="options">
       <div class="optionsContent">
+        <p>the wind, east of lake erie</p>
+        <br>
         <p>NOAA station ID: <a target="_blank" href="https://tidesandcurrents.noaa.gov/stationhome.html?id=9063020">9063020</a></p>
         <br>
         <p>~ wind speed ~</p>
           <p id ="baseline">baseline:</p>
           <p id="gust">gusts: </p>
+          <p id="direction">dir: </p>
         <br>
         <p>~ volume ~</p>
           <input type="range" min="0" max="100" value="50" class="slider" id="vol">
@@ -45,20 +45,51 @@
             saw <input type="radio" name="waveform" value=3 class="radio" onclick="waveformSelector(this)"><br>
         
         <br>
-        <p>~ FM ~</p>
-          freq: <input type="range" min="0" max="100" value="60" class="slider" id="fmFreq" onload, onclick="fmFreq(this)">
-          amt: <input type="range" min="0" max="100" value="40" class="slider" id="fmAmt" onload, onclick="fmAmp(this)">
-        <p></p><br> 
         <p>~ release ~</p>
-          <input type="range" min="0" max="100" value="25" class="slider" id="release" onclick, onload="releaseChange(this)">
+          <input type="range" min="0" max="100" value="15" class="slider" id="release" onchange="releaseChange(this)">
         <p></p><br>
+        <p>~ FM ~</p>
+          freq: <input type="range" min="0" max="100" value="60" class="slider" id="fmFreq" onchange="fmFreq(this)">
+          amt: <input type="range" min="0" max="100" value="25" class="slider" id="fmAmt" onchange="fmAmp(this)">
+        <p></p><br> 
+        <p>~ snow ~</p>
+          <input type="range" min="0" max="100" value="60" class="slider" id="snow" onchange="snowChange(this)">
+        <p></p><br>
+        <p>~ reset notes ~</p>
+          fifths <input type="radio" name="scale" value=0 class="radio" onclick="scaleSelector(this)"><br>
+          fourths <input type="radio" name="scale" value=1 class="radio" onclick="scaleSelector(this)"><br>
+          chromatic <input type="radio" name="scale" value=2 class="radio" onclick="scaleSelector(this)" checked><br>
+          micro <input type="radio" name="scale" value=3 class="radio" onclick="scaleSelector(this)"><br>
+        
+        <br>
+        
         <p>~ tips & tricks ~</p>
         <br>
-        <p>qwerty = piano</p>
-        <p>octave -/+: [ ]</p>
+        <p>use your keyboard</p>
+        <p>to play new notes,</p>
+        <p>which stick around</p>
         <br>
-        <p>try coming back <br>when it's windy <br>at my house</p>
-        <p></p>
+        <p>change octaves</p>
+        <p>with [ and ]</p>
+        <br>
+        <p>the cursor is a</p>
+        <p>useful ghost</p>
+        <br>
+        <p>try coming back <br>when it's windy <br>at my apartment</p>
+        <br>
+        <p>~ about ~</p>
+        <br>
+        <p>a regional instrument</p>
+        <p>made by <a target="_blank" href="http://www.lukewilliamsmusic.com">Luke</a></p>
+        <p>in November 2019</p>
+        <br>
+        <p>a <a target="_blank" href="http://www.usefulparade.com">Useful Parade</a> site</p>
+        <br>
+        <p>special thanks to NOAA's amazing <a href="https://tidesandcurrents.noaa.gov/api/">tides and currents</a> API</p>
+        <br>
+        <p>inspired by "January",</p>
+        <p>a now-defunct <br> snow instrument</p>
+        <p>by <a target="_blank" href="http://www.disasterpeace.com">Disasterpeace</a></p>
       </div>
 
     </div>

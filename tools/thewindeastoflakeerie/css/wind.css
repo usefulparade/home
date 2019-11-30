@@ -62,6 +62,11 @@ a {
     font-size: 1.5em;
     right: 10px;
     cursor: pointer;
+    transform: rotate(0deg);
+    transition: 1s;
+    transition-timing-function: ease-in-out;
+    user-select: none;
+    moz-user-select: none;
 }
 
 .options {
@@ -74,7 +79,7 @@ a {
     height: 0%;
     overflow-y: scroll;
     direction: rtl;
-    transition: 0.5s;
+    transition: 1s;
 }
 
 .optionsContent {
@@ -97,29 +102,39 @@ a {
     appearance: none;
     width: 100px; /* Full-width */
     height: 1px; /* Specified height */
-    background: white; /* Grey background */
+    background: white;
     outline: none; /* Remove outline */
     opacity: 1; /* Set transparency (for mouse-over effects on hover) */
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: opacity .2s;
+    user-select: none;
+}
+
+.slider:active {
+    outline: none;
 }
 
 .slider::-webkit-slider-thumb {
     -webkit-appearance: none; /* Override default look */
     appearance: none;
-    width: 2px; /* Set a specific slider handle width */
-    height: 20px; /* Slider handle height */
-    background: white; /* Green background */
+    width: 15px; /* Set a specific slider handle width */
+    height: 15px; /* Slider handle height */
+    background: white; 
+    border: 0px; 
+    border-radius: 50px;
     cursor: pointer; /* Cursor on hover */
+    user-select: none;
 }
   
 .slider::-moz-range-thumb {
-    width: 2px; /* Set a specific slider handle width */
-    height: 20px; /* Slider handle height */
-    background: white; /* Green background */
+    width: 15px; /* Set a specific slider handle width */
+    height: 15px; /* Slider handle height */
+    background: white;
+    border: 0px;
+    border-radius: 50px;
     cursor: pointer; /* Cursor on hover */
+    user-select: none;
 }
-
 
 .radio
 {

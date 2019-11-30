@@ -1,16 +1,16 @@
 /// SOURCES!!
-/// noise.js by josephg
 /// matter.js
 /// p5.js
 /// NOAA api
 
 var allBodies = [];
-var allLeaves = [];
+var allFlakes= [];
 
 var chainLength = 16;
 
 var baselineP = document.getElementById("baseline"),
-    gustP = document.getElementById("gust");
+    gustP = document.getElementById("gust"),
+    dirP = document.getElementById("direction");
 
 function setup(){
     noiseSeed(random()*100);
@@ -50,18 +50,14 @@ function windUpdate(){
 
             baselineP.innerHTML = "baseline: " + windData.data[0].s + " m/s";
             gustP.innerHTML = "gusts: " + windData.data[0].g + " m/s";
+            var simpleDir = windData.data[0].dr.slice(-2);
+            dirP.innerHTML = "from: " + simpleDir;
 
         } else {
         }
 
     };
 }
-
-// seed the noise
-
-// noise.seed(Math.random());
-
-// noiseSeed(random()*100);
 
 // START MATTER JS STUFF
 
@@ -177,8 +173,6 @@ Events.on(engine, "beforeUpdate", function(){
 
 Events.on(engine, "collisionStart", function (event){
     var pairs = event.pairs;
-    // console.log(event);
-    // console.log(pair.bodyB.speed);
     for (i=0;i<pairs.length;i++){
         pair = pairs[i];
         // if it's not the mouse, & one of the pair is a chime, play!
@@ -191,39 +185,13 @@ Events.on(engine, "collisionStart", function (event){
                 }
             }
         }
-
-            // if (pair.bodyA == allBodies[j]){
-            //     // osc[j].scale(0, 1, 0, (pair.bodyB.speed * 0.1))
-            //     env[j].setRange(pair.bodyB.speed * 0.1, 0);
-            //     env[j].play();
-            //     chimes[j].bonk();
-                
-            // }
         }
     
 });
 
-// update text
-
-// add mouse control
-// var mouse = Mouse.create(render.canvas),
-// mouseConstraint = MouseConstraint.create(engine, {
-//     mouse: mouse,
-//     constraint: {
-//         stiffness: 0.98,
-//         render: {
-//             visible: false
-//         }
-//     }
-// });
-// World.add(world,mouseConstraint);
-// render.mouse = mouse;
 
 // run the engine
 Engine.run(engine);
-
-// run the renderer
-// Render.run(render);
 
 // generate noise!
 

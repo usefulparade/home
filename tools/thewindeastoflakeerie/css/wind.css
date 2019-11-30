@@ -4,7 +4,7 @@
 }
 
 body {
-    font-family: "Easley", Courier, monospace;
+    font-family: "Courier New", Courier, monospace;
     background-color: #0f0f13;
     color: white;
     width: 100%;
@@ -20,6 +20,10 @@ h1 {
     font-weight: lighter;
 }
 
+p {
+    margin: 0px;
+}
+
 canvas {
     display: block;
     margin-left: auto;
@@ -30,12 +34,16 @@ span {
     display: inline-block;
 }
 
+a {
+    color: white;
+}
+
 .container {
     display: block;
     position: fixed;
     width: 100%;
     height: 100%;
-    margin: 0;
+    margin: 0px;
 }
 
 .title {
@@ -45,6 +53,32 @@ span {
     width: 100%;
     user-select: none;
     moz-user-select: none;
+}
+
+.optionsButton {
+    display: block;
+    position: fixed;
+    text-align: right;
+    font-size: 1.5em;
+    right: 10px;
+    cursor: pointer;
+}
+
+.options {
+    display: block;
+    position: fixed;
+    top: 40px;
+    right: 10px;
+    text-align: right;
+    width: 200px;
+    height: 0%;
+    overflow-y: scroll;
+    direction: rtl;
+    transition: 0.5s;
+}
+
+.optionsContent {
+    direction: ltr;
 }
 
 .p5Canvas {
@@ -57,3 +91,67 @@ span {
     pointer-events: none;
     z-index: -100;
 }  
+
+.slider {
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    width: 100px; /* Full-width */
+    height: 1px; /* Specified height */
+    background: white; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 1; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 2px; /* Set a specific slider handle width */
+    height: 20px; /* Slider handle height */
+    background: white; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}
+  
+.slider::-moz-range-thumb {
+    width: 2px; /* Set a specific slider handle width */
+    height: 20px; /* Slider handle height */
+    background: white; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}
+
+
+.radio
+{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    display: inline-block;
+    position: relative;
+    background-color: white;
+    color: black;
+    top: 5px;
+    height: 15px;
+    width: 15px;
+    border: 0;
+    border-radius: 50px;
+    cursor: pointer;
+    outline: none;
+}
+.radio:checked::before
+{
+    position: absolute;
+    font-family: 'Courier New', Courier, monospace;
+    left: 4px;
+    font-weight: bold;
+    content: '\02143';
+    transform: rotate(40deg);
+}
+.radio:hover
+{
+    background-color: white;
+}
+.radio:checked
+{
+    background-color: white;
+}

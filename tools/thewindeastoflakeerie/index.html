@@ -22,6 +22,47 @@
       <h1>the wind, <span>east of lake erie</span></h1>
     </div>
 
+    <div class="optionsButton" onclick="optionsToggle()">
+      <p>+</p>
+    </div>
+
+    <div id="options" class="options">
+      <div class="optionsContent">
+        <p>NOAA station ID: <a target="_blank" href="https://tidesandcurrents.noaa.gov/stationhome.html?id=9063020">9063020</a></p>
+        <br>
+        <p>~ wind speed ~</p>
+          <p id ="baseline">baseline:</p>
+          <p id="gust">gusts: </p>
+        <br>
+        <p>~ volume ~</p>
+          <input type="range" min="0" max="100" value="50" class="slider" id="vol">
+        <p></p><br>
+
+        <p>~ waveform ~</p>
+            sine <input type="radio" name="waveform" value=0 class="radio" onclick="waveformSelector(this)"><br>
+            tri <input type="radio" name="waveform" value=1 class="radio" onclick="waveformSelector(this)"><br>
+            square <input type="radio" name="waveform" value=2 class="radio" onclick="waveformSelector(this)" checked><br>
+            saw <input type="radio" name="waveform" value=3 class="radio" onclick="waveformSelector(this)"><br>
+        
+        <br>
+        <p>~ FM ~</p>
+          freq: <input type="range" min="0" max="100" value="60" class="slider" id="fmFreq" onload, onclick="fmFreq(this)">
+          amt: <input type="range" min="0" max="100" value="40" class="slider" id="fmAmt" onload, onclick="fmAmp(this)">
+        <p></p><br> 
+        <p>~ release ~</p>
+          <input type="range" min="0" max="100" value="25" class="slider" id="release" onclick, onload="releaseChange(this)">
+        <p></p><br>
+        <p>~ tips & tricks ~</p>
+        <br>
+        <p>qwerty = piano</p>
+        <p>octave -/+: [ ]</p>
+        <br>
+        <p>try coming back <br>when it's windy <br>at my house</p>
+        <p></p>
+      </div>
+
+    </div>
+
     <div class="p5Canvas"></div>
   </div>
 </body>

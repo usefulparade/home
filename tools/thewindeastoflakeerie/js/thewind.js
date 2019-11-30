@@ -9,6 +9,9 @@ var allLeaves = [];
 
 var chainLength = 16;
 
+var baselineP = document.getElementById("baseline"),
+    gustP = document.getElementById("gust");
+
 function setup(){
     noiseSeed(random()*100);
 }
@@ -42,6 +45,11 @@ function windUpdate(){
             windData = JSON.parse(request.response);
             console.log(windData);
             dataReady = true;
+
+            //update the text!
+
+            baselineP.innerHTML = "baseline: " + windData.data[0].s + " m/s";
+            gustP.innerHTML = "gusts: " + windData.data[0].g + " m/s";
 
         } else {
         }

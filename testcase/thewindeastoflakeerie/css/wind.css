@@ -1,0 +1,59 @@
+@font-face {
+    font-family: "Easley";
+    src: url("/font/Easley-Regular.otf");
+}
+
+body {
+    font-family: "Easley", Courier, monospace;
+    background-color: #0f0f13;
+    color: white;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+h1 {
+    text-align: right;
+    font-size: 1.5em;
+    margin-right: 15px;
+    margin-bottom: 0px;
+    font-weight: lighter;
+}
+
+canvas {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+span {
+    display: inline-block;
+}
+
+.container {
+    display: block;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.title {
+    display: block;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    user-select: none;
+    moz-user-select: none;
+}
+
+.p5Canvas {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -100;
+}  

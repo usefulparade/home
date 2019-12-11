@@ -26,10 +26,11 @@ var noiseVal = 0,
 
 var baseSpeed, gustSpeed, diffSpeed;
 var combinedWindSpeed = 0;
+var windDampener = 6; // this val is less than gravity bc it needs to be a bit exaggerated
 
 function windUpdate(){
     var base = "https://tidesandcurrents.noaa.gov/api/datagetter?";
-    var options = "date=latest&station=9063020&datum=LWD&product=wind&units=metric&time_zone=lst_ldt&application=ports_screen&format=json";
+    var options = "date=recent&station=9063020&datum=LWD&product=wind&units=metric&time_zone=lst_ldt&application=ports_screen&format=json";
     var url = base + options;
     console.log(url);
     var request = new XMLHttpRequest();
@@ -143,10 +144,10 @@ Events.on(engine, "beforeUpdate", function(){
     diffSpeed = gustSpeed - baseSpeed;
 
     if (dataReady){
-        if (noiseVal >= 0.9){
-            // if noise gets above 0.9, make a gust!
+        if (noiseVal >= 0.8){
+            // if noise gets above 0.8, make a gust!
            combinedWindSpeed = noiseVal*(gustSpeed);
-        } else if (noiseVal < 0.9 && noiseVal > 0){
+        } else if (noiseVal < 0.8 && noiseVal > 0){
             // otherwise, if it's positive, just be windy
             combinedWindSpeed = noiseVal*(baseSpeed);
         } else {
@@ -157,8 +158,8 @@ Events.on(engine, "beforeUpdate", function(){
         combinedWindSpeed = noiseVal;
     }
 
-    world.gravity.x = (combinedWindSpeed / 9.81);
-    world.gravity.y = 1 - (combinedWindSpeed / 20);
+    world.gravity.x = (combinedWindSpeed / windDampener);
+    world.gravity.y = 1 - (combinedWindSpeed / 15);
     
 });
 

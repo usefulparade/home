@@ -12,6 +12,8 @@ var baselineP = document.getElementById("baseline"),
     gustP = document.getElementById("gust"),
     dirP = document.getElementById("direction");
 
+var dataLength = 0;
+
 function setup(){
     noiseSeed(random()*100);
 }
@@ -26,7 +28,7 @@ var noiseVal = 0,
 
 var baseSpeed, gustSpeed, diffSpeed;
 var combinedWindSpeed = 0;
-var windDampener = 6; // this val is less than gravity bc it needs to be a bit exaggerated
+var windDampener = 5; // this val is less than gravity bc it needs to be a bit exaggerated
 
 function windUpdate(){
     var base = "https://tidesandcurrents.noaa.gov/api/datagetter?";
@@ -47,11 +49,13 @@ function windUpdate(){
             console.log(windData);
             dataReady = true;
 
+            dataLength = windData.data.length - 1;
+
             //update the text!
 
-            baselineP.innerHTML = "baseline: " + windData.data[0].s + " m/s";
-            gustP.innerHTML = "gusts: " + windData.data[0].g + " m/s";
-            var simpleDir = windData.data[0].dr.slice(-2);
+            baselineP.innerHTML = "baseline: " + windData.data[dataLength].s + " m/s";
+            gustP.innerHTML = "gusts: " + windData.data[dataLength].g + " m/s";
+            var simpleDir = windData.data[dataLength].dr.slice(-2);
             dirP.innerHTML = "from: " + simpleDir;
 
         } else {
@@ -137,8 +141,8 @@ World.add(world, rope);
 Events.on(engine, "beforeUpdate", function(){
 
     noiseVal = noiseGen();
-    baseSpeed = windData.data[0].s;
-    gustSpeed = windData.data[0].g;
+    baseSpeed = windData.data[dataLength].s;
+    gustSpeed = windData.data[dataLength].g;
     // baseSpeed = 50;
     // gustSpeed = 70;
     diffSpeed = gustSpeed - baseSpeed;
@@ -159,7 +163,7 @@ Events.on(engine, "beforeUpdate", function(){
     }
 
     world.gravity.x = (combinedWindSpeed / windDampener);
-    world.gravity.y = 1 - (combinedWindSpeed / 15);
+    world.gravity.y = 1 - (combinedWindSpeed / (windDampener*2));
     
 });
 

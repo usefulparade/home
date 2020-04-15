@@ -11,8 +11,13 @@ let notes = [];
 var speedP, speedSlider;
 var volumeP, volumeSlider;
 var pitchSpread;
+var context;
 
 function setup() {
+  
+  context = getAudioContext();
+  context.suspend();
+
   c = createCanvas(640, 320);
   cParent = document.getElementById("game");
   c.parent(cParent);
@@ -71,10 +76,12 @@ function setup() {
   pitchSlider = document.getElementById("ySlider");
   ySliderChange();
   // init();
+
+  context.suspend();
 }
 
 function draw() {
-  clear();
+  background(15, 15, 19);
   if (frameCount%speed == 0){
     generate();
   }
@@ -99,6 +106,7 @@ function draw() {
 function init() {
   frameCount = 0;
   userStartAudio();
+  getAudioContext().resume();
 
   for (let x = 0; x<rows;x++){
     for (let y = 0; y<columns, y++;){

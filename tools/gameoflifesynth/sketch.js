@@ -1,4 +1,4 @@
-let w;
+let w, canvWidth, canvHeight;
 let columns;
 let rows;
 let board;
@@ -18,11 +18,20 @@ function setup() {
   context = getAudioContext();
   context.suspend();
 
-  c = createCanvas(640, 320);
+  if (windowWidth > 640){
+    canvWidth = 640;
+    canvHeight = 320;
+    w = 40;
+  } else {
+    canvWidth = windowWidth;
+    canvHeight = (canvWidth/16)*8;
+    w = canvWidth/16;
+  }
+
+  c = createCanvas(canvWidth, canvHeight);
   cParent = document.getElementById("game");
   c.parent(cParent);
 
-  w = 40;
   // Calculate columns and rows
   columns = floor(width / w);
   rows = floor(height / w);
@@ -56,7 +65,7 @@ function setup() {
       synths[j][k].start();
 
       envelopes[j][k] = new p5.Envelope()
-      envelopes[j][k].setADSR(0, 0.5, 0.07, 0);
+      envelopes[j][k].setADSR(0.005, 0.5, 0.07, 0.01);
       envelopes[j][k].setRange(0.5, 0);
       synths[j][k].amp(envelopes[j][k]);
     }
@@ -234,6 +243,16 @@ function remapNotes(){
     for (j=0;j<rows;j++){
       synths[i][j].freq(midiToFreq(notes[i]) + (random(-1, 1)*pitchSpread));
     }
+  }
+}
+
+function windowResized(){
+  if (windowWidth > 640){
+    resizeCanvas(640, 320);
+    w = 40;
+  } else {
+    resizeCanvas(windowWidth, (windowWidth/16)*8);
+    w = windowWidth/16;
   }
 }
 

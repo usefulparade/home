@@ -74,14 +74,14 @@ function setup() {
 }
 
 function draw() {
-  background(0);
+  clear();
   if (frameCount%speed == 0){
     generate();
   }
   for ( let i = 0; i < columns;i++) {
     for ( let j = 0; j < rows;j++) {
       if ((board[i][j] == 1)) fill(255);
-      else fill(0);
+      else noFill();
       stroke(255);
       ellipse(i * w + w/2, j * w + w/2, w);
       // rect(i * w + w/2, j * w, w-1, w-1);

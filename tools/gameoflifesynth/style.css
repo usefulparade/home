@@ -1,12 +1,13 @@
 body {
-    padding: 0;
-    margin: 0;
-    font-family: "Courier New", Courier, monospace;
-    font-weight: 100;
-    background-color: #0f0f13;
-    color: white;
-    width: 100%;
-    height: 100%;
+  padding: 0;
+  margin: 0;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 16;
+  font-weight: 100;
+  background-color: #0f0f13;
+  color: white;
+  width: 100%;
+  height: 100%;
 
 }
 
@@ -69,41 +70,6 @@ h1 {
   user-select: none;
 }
 
-.radio {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  display: inline-block;
-  position: relative;
-  background-color: white;
-  color: black;
-  top: 5px;
-  height: 15px;
-  width: 15px;
-  border: 0;
-  border-radius: 50px;
-  cursor: pointer;
-  outline: none;
-}
-
-.radio:checked::before
-{
-    position: absolute;
-    font-family: 'Courier New', Courier, monospace;
-    left: 4px;
-    font-weight: bold;
-    content: '\02143';
-    transform: rotate(40deg);
-}
-.radio:hover
-{
-    background-color: white;
-}
-.radio:checked
-{
-    background-color: white;
-}
-
 .sliderP {
   margin-bottom: 0px;
 }
@@ -145,7 +111,12 @@ h1 {
 }
 
 @media only screen and (max-width: 700px){
+  p, h1 {
+    font-size: 0.6em;
+  }
+
   .controls{
     padding-left: 40px;
+    width: 100%;
   }
 }

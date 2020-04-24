@@ -151,6 +151,7 @@ h1 {
 .outro {
   text-align: left;
   margin-top: 40px;
+  margin-bottom: 40px;
   width: 320px;
 }
 
@@ -167,6 +168,10 @@ h1 {
     padding-left: 40px;
     padding-right: 40px;
     width: auto;
+  }
+
+  .outro {
+    width: 200px;
   }
   .sliders{
     right: 40px;

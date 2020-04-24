@@ -10,13 +10,21 @@ let envelopes = [];
 let notes = [];
 var speedP, speedSlider;
 var volumeP, volumeSlider;
+var detuneSlider, filterSlider;
 var pitchSpread;
 var context;
+var touchIsDown;
+var paused;
+var scaleVal, microInterval;
+
+var filter;
 
 function setup() {
   
   context = getAudioContext();
   context.suspend();
+
+  scaleVal = 2;
 
   if (windowWidth > 640){
     canvWidth = 640;
@@ -35,18 +43,35 @@ function setup() {
   // Calculate columns and rows
   columns = floor(width / w);
   rows = floor(height / w);
-  // Wacky way to make a 2D array is JS
+
+  // Wacky way to make a 2D array in JS
   board = new Array(columns);
   for (let i = 0; i < columns; i++) {
     board[i] = new Array(rows);
   }
+  
   // Going to use multiple 2D arrays and swap them
   next = new Array(columns);
   for (i = 0; i < columns; i++) {
     next[i] = new Array(rows);
   }
+
+  for (let i = 0; i < columns; i++) {
+    for (let j = 0; j < rows; j++) {
+      board[i][j] = 0;
+      next[i][j] = 0;
+    }
+  }
   
-  notes = [48, 50, 52, 53, 55, 57, 59, 60, 62, 64, 65, 67, 69, 71, 72, 74, 76];
+  notes = [48, 50, 52, 53, 55, 57, 59, 
+          60, 62, 64, 65, 67, 69, 71, 
+          72, 74, 76, 77, 79, 81, 83, 
+          84, 86, 88];
+
+  filter = new p5.LowPass();
+  filter.freq(1100);
+  filter.res(10);
+
   synths = new Array(columns);
   for (i = 0;i<columns;i++){
     synths[i] = new Array(rows);
@@ -68,8 +93,12 @@ function setup() {
       envelopes[j][k].setADSR(0.005, 0.5, 0.07, 0.01);
       envelopes[j][k].setRange(0.5, 0);
       synths[j][k].amp(envelopes[j][k]);
+      synths[j][k].disconnect();
+      synths[j][k].connect(filter);
     }
   }
+
+  
 
   speed = 30;
   speedP = document.getElementById("speedP");
@@ -82,38 +111,70 @@ function setup() {
   volumeSliderChange();
 
   pitchSpread = 2;
-  pitchSlider = document.getElementById("ySlider");
-  ySliderChange();
+  microInterval = 1.0293;
+  pitchSlider = document.getElementById("detuneSlider");
+  detuneSliderChange();
+
+  filterSlider = document.getElementById("filterSlider");
+  filterSliderChange();
   // init();
 
+
   context.suspend();
+  touchIsDown = false;
+  paused = true;
 }
 
 function draw() {
   background(15, 15, 19);
+
   if (frameCount%speed == 0){
-    generate();
+    if (!paused){
+      generate();
+    }
   }
+
   for ( let i = 0; i < columns;i++) {
     for ( let j = 0; j < rows;j++) {
-      if ((board[i][j] == 1)) fill(255);
+      var r = w/2;
+      var x = i*w+r;
+      var y = j*w+r;
+      
+      if (mouseX > x-r && mouseX < x+r && mouseY > y-r && mouseY < y+r && board[i][j] != 1) {
+        ellipse(i * w + w/2, j * w + w/2, w/2);
+        if (mouseIsPressed){
+          if (board[i][j] == 0){
+            board[i][j] = 1;
+            playVoice(i, j);
+          }
+        }
+      }
+      else if (touchIsDown){
+          if (touches[0].x > x-r && touches[0].x < x+r && touches[0].y > y-r && touches[0].y < y+r && board[i][j] != 1) {
+          board[i][j] = 1;
+          playVoice(i, j);
+        }
+      }
+      else if ((board[i][j] == 1)) fill(255);
       else noFill();
       stroke(255);
       ellipse(i * w + w/2, j * w + w/2, w);
-      // rect(i * w + w/2, j * w, w-1, w-1);
+
+
     }
   }
 
 }
 
-// reset board when mouse is pressed
 // function mousePressed() {
 //   init();
 // }
 
 // Fill board randomly
-function init() {
+function randomize() {
   frameCount = 0;
+  paused = false;
+
   userStartAudio();
   getAudioContext().resume();
 
@@ -122,12 +183,10 @@ function init() {
       synths[x][y].releaseVoice();
     }
   }
+
   for (let i = 0; i < columns; i++) {
     for (let j = 0; j < rows; j++) {
-      // Lining the edges with 0s
-      if (i == 0 || j == 0 || i == columns-1 || j == rows-1) board[i][j] = 0; 
-      // Filling the rest randomly
-      else board[i][j] = floor(random(2));
+      board[i][j] = floor(random(1.2));
       next[i][j] = 0;
       if (board[i][j] == 1) playVoice(i, j);
     }
@@ -138,16 +197,15 @@ function init() {
 function generate() {
 
   // Loop through every spot in our 2D array and check spots neighbors
-  for (let x = 1; x < columns - 1; x++) {
-    for (let y = 1; y < rows - 1; y++) {
+  for (let x = 0; x < columns; x++) {
+    for (let y = 0; y < rows; y++) {
       // Add up all the states in a 3x3 surrounding grid
       let neighbors = 0;
       for (let i = -1; i <= 1; i++) {
         for (let j = -1; j <= 1; j++) {
-          neighbors += board[x+i][y+j];
+          neighbors += getNeighborWrapped(x+i, y+j);
         }
       }
-
       // A little trick to subtract the current cell's state since
       // we added it in the above loop
       neighbors -= board[x][y];
@@ -159,9 +217,10 @@ function generate() {
     }
   }
 
+
   //play the sounds!
-  for (let x2 = 1; x2 < columns - 1; x2++) {
-    for (let y2 = 1; y2 < rows - 1; y2++) {
+  for (let x2 = 0; x2 < columns; x2++) {
+    for (let y2 = 0; y2 < rows; y2++) {
       
       if      ((board[x2][y2] == 0) && (next[x2][y2] == 0)) releaseVoice(x2, y2);                         // 0 to 0, no change, no voice
       else if ((board[x2][y2] == 0) && (next[x2][y2] == 1)) playVoice(x2, y2);        // 0 to 1, play a note!
@@ -171,7 +230,6 @@ function generate() {
       else                                                  ;                         // shouldn't come to this but w/e!
     }
   }
-
   
 
   // Swap!
@@ -179,6 +237,17 @@ function generate() {
   board = next;
   next = temp;
 }
+
+ function getNeighborWrapped(c0, r0){
+    var c, r;
+
+    if (c0 < 0) c = c0 + columns;
+    else c = c0 % columns;
+    if (r0 < 0) r = r0 + rows;
+    else r = r0 % rows;
+
+    return board[c][r];
+   }
 
 function playVoice(x, y){
   let note = notes[x];
@@ -206,42 +275,73 @@ function volumeSliderChange(){
 
 function octUp(){
   for (i=0;i<notes.length;i++){
-    notes[i] += 12;
+    if (scaleVal != 0){
+      notes[i] += 12;
+    } else {
+      notes[i] = notes[i]*2;
+    }
   }
   remapNotes();
 }
 
 function octDown(){
+  
   for (i=0;i<notes.length;i++){
-    notes[i] -= 12;
+    if (scaleVal != 0){
+      notes[i] -= 12;
+    } else {
+      notes[i] = notes[i]*0.5;
+    }
   }
   remapNotes();
 }
 
 function stepUp(){
+
   for (i=0;i<notes.length;i++){
-    notes[i] += 1;
+    if (scaleVal != 0){
+      notes[i] += 1;
+    } else {
+      notes[i] = notes[i] * microInterval;
+    }
   }
   remapNotes();
 }
 
-function setpDown(){
+function stepDown(){
   for (i=0;i<notes.length;i++){
-    notes[i] -= 1;
+    if (scaleVal != 0){
+      notes[i] -= 1;
+    } else {
+      notes[i] = notes[i] * (1/microInterval);
+    }
   }
   remapNotes();
 }
 
 
-function ySliderChange(){
+function detuneSliderChange(){
   pitchSpread = map(ySlider.value, 0, 100, 0, 10);
   remapNotes();
 }
 
+function filterSliderChange(){
+  var frequency = map(filterSlider.value, 0, 100, 100, 1100);
+  filter.freq(frequency);
+}
+
 function remapNotes(){
-  for (i=0;i<columns;i++){
-    for (j=0;j<rows;j++){
-      synths[i][j].freq(midiToFreq(notes[i]) + (random(-1, 1)*pitchSpread));
+  if (scaleVal != 0){
+    for (i=0;i<columns;i++){
+      for (j=0;j<rows;j++){
+        synths[i][j].freq(midiToFreq(notes[i+(rows-j-1)]) + (random(-1, 1)*pitchSpread));
+      }
+    }
+  } else {
+    for (i=0;i<columns;i++){
+      for (j=0;j<rows;j++){
+        synths[i][j].freq(notes[i+(rows-j-1)]) + (random(-1, 1)*(pitchSpread));
+      }
     }
   }
 }
@@ -256,4 +356,76 @@ function windowResized(){
   }
 }
 
+function touchStarted(){
+  touchIsDown = true;
+}
+function touchEnded(){
+  touchIsDown = false;
+}
+
+function playButton(){
+  paused = false;
+  frameCount = 0;
+
+  userStartAudio();
+  getAudioContext().resume();
+
+  for (let x = 0; x<rows;x++){
+    for (let y = 0; y<columns, y++;){
+      synths[x][y].releaseVoice();
+    }
+  }
+  
+  for (let i = 0; i < columns; i++) {
+    for (let j = 0; j < rows; j++) {
+      board[i][j] = board[i][j];
+      next[i][j] = 0;
+      if (board[i][j] == 1) playVoice(i, j);
+    }
+  }
+
+}
+
+function pauseButton(){
+  paused = true;
+}
+
+function scaleSelector(scaleRadio){
+  scaleVal = scaleRadio.value;
+  var interval = 1;
+  var base = notes[0];
+  var newNotes = [];
+
+  if (scaleVal == 0){
+   makeMicroNotes();
+      
+  } else if (scaleVal == 1){
+    notes = [48, 49, 50, 51, 52, 53, 54, 
+            55, 56, 57 ,58 ,59 ,60, 61,
+            62, 63, 64, 65, 66, 67, 68,
+            69, 70, 71];
+
+  } else if (scaleVal == 2){
+    notes = [48, 50, 52, 53, 55, 57, 59, 
+      60, 62, 64, 65, 67, 69, 71, 
+      72, 74, 76, 77, 79, 81, 83, 
+      84, 86, 88];
+  } else if (scaleVal == 3){
+    notes[0] = 48;
+    for (i=1;i<notes.length;i++){
+      notes[i] = notes[i-1] + 2;
+    }
+  }
+
+  remapNotes();
+
+}
+
+function makeMicroNotes(){
+  notes[0] = midiToFreq(60);
+  microInterval = 1.0293;
+  for (i=1;i<notes.length;i++){
+    notes[i] = notes[i-1]*microInterval;
+  }
+}
 

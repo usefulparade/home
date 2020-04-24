@@ -74,6 +74,41 @@ h1 {
   margin-bottom: 0px;
 }
 
+.radio
+{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    display: inline-block;
+    position: relative;
+    background-color: white;
+    color: black;
+    top: 5px;
+    height: 15px;
+    width: 15px;
+    border: 0;
+    border-radius: 50px;
+    cursor: pointer;
+    outline: none;
+}
+.radio:checked::before
+{
+    position: absolute;
+    font-family: 'Courier New', Courier, monospace;
+    left: 4px;
+    font-weight: bold;
+    content: '\02143';
+    transform: rotate(40deg);
+}
+.radio:hover
+{
+    background-color: white;
+}
+.radio:checked
+{
+    background-color: white;
+}
+
 
 .container {
   display: block;
@@ -104,6 +139,15 @@ h1 {
   margin-top: 40px;
 }
 
+.sliders {
+  display: block;
+  position: absolute;
+  right: 0px;
+  top: 10px;
+  width: 100px;
+  text-align: right;
+}
+
 .outro {
   text-align: left;
   margin-top: 40px;
@@ -112,11 +156,19 @@ h1 {
 
 @media only screen and (max-width: 700px){
   p, h1 {
-    font-size: 0.6em;
+    font-size: 0.8em;
+  }
+
+  .game {
+    width: 100%;
   }
 
   .controls{
     padding-left: 40px;
-    width: 100%;
+    padding-right: 40px;
+    width: auto;
+  }
+  .sliders{
+    right: 40px;
   }
 }

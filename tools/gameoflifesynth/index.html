@@ -18,20 +18,30 @@
     </div>
     <div class='game' id='game'></div>
     <div class='controls'>
-      <p><a onclick="init()" href="#">play</a></p>
+      <div class="sliders">
+        <p class="sliderP" id="speedP">speed</p>
+          <input type="range" min="1" max="100" value="30" class="slider" id="speedSlider" oninput="speedSliderChange()">
+
+        <p class="sliderP" id="volumeP">vol</p>
+          <input type="range" min="0" max="100" value="50" class="slider" id="volumeSlider" oninput="volumeSliderChange()">
+
+        <p class="sliderP" id="volumeP">filter</p>
+          <input type="range" min="0" max="100" value="100" class="slider" id="filterSlider" oninput="filterSliderChange()">
+        <p>detune</p>
+          <input type="range" min="0" max="100" value="20" class="slider" id="ySlider" oninput="detuneSliderChange()">
+      </div>
+
+      <p><a onclick="randomize()" href="#">randomize</a> / <a onclick="playButton()" href="#">play</a> / <a onclick="pauseButton()" href="#">pause</a></p>
 
       <p>oct <a onclick="octDown()" href="#"> - </a>/<a onclick="octUp()" href="#"> + </a> </p>
       <p>step <a onclick="stepDown()" href="#"> - </a>/<a onclick="stepUp()" href="#"> + </a> </p>
-
-      <p class="sliderP" id="speedP">speed</p>
-        <input type="range" min="1" max="100" value="30" class="slider" id="speedSlider" oninput="speedSliderChange()">
-
-      <p class="sliderP" id="volumeP">vol</p>
-        <input type="range" min="0" max="100" value="50" class="slider" id="volumeSlider" oninput="volumeSliderChange()">
-
-      <p>detune</p>
-      <input type="range" min="0" max="100" value="20" class="slider" id="ySlider" oninput="ySliderChange()">
-
+      
+      <p>scale</p>
+          <p><input type="radio" name="scale" value=0 class="radio" onclick="scaleSelector(this)"> micro <br>
+          <input type="radio" name="scale" value=1 class="radio" onclick="scaleSelector(this)"> chromatic <br> 
+          <input type="radio" name="scale" value=2 class="radio" onclick="scaleSelector(this)" checked> diatonic <br> 
+          <input type="radio" name="scale" value=3 class="radio" onclick="scaleSelector(this)"> wholetone <br> </p>
+      
       
 
       <div class="outro">
@@ -41,6 +51,7 @@
         
         <p>rip John Conway</p>
       </div>
+      
     </div>
   </div>
 </body>

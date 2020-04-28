@@ -5,10 +5,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GLS-01</title>
+  <script src="webmidi.min.js"></script>
   <script src="p5.min.js"></script>
   <script src="p5.sound.min.js"></script>
   <script src="sketch.js"></script>
+  
   <link rel="stylesheet" href="style.css">
+  
 </head>
 
 <body>
@@ -19,8 +22,16 @@
     <div class='game' id='game'></div>
     <div class='controls'>
       <div class="sliders">
-        <p class="sliderP" id="speedP">speed</p>
-          <input type="range" min="1" max="100" value="30" class="slider" id="speedSlider" oninput="speedSliderChange()">
+        <!-- <p class="sliderP" id="speedP">speed</p>
+          <input type="range" min="1" max="100" value="30" class="slider" id="speedSlider" oninput="speedSliderChange()"> -->
+
+        <p>osc type:</p>
+        <select onchange="oscSelector(this)" id="scale">
+          <option value="sine">sin</option>
+          <option value="triangle" selected>tri</option>
+          <option value="sawtooth">saw</option>
+          <option value="square">square</option>
+        </select>
 
         <p class="sliderP" id="volumeP">vol</p>
           <input type="range" min="0" max="100" value="50" class="slider" id="volumeSlider" oninput="volumeSliderChange()">
@@ -29,19 +40,45 @@
           <input type="range" min="0" max="100" value="100" class="slider" id="filterSlider" oninput="filterSliderChange()">
         <p>detune</p>
           <input type="range" min="0" max="100" value="20" class="slider" id="ySlider" oninput="detuneSliderChange()">
+          
       </div>
 
-      <p><a onclick="randomize()" href="#">randomize</a> / <a onclick="playButton()" href="#">play</a> / <a onclick="pauseButton()" href="#">pause</a></p>
-
+      <p><a onclick="randomize()" href="#">randomize</a> / <a onclick="clearButton()" href="#">clear</a></p>
+      <p><a onclick="playButton()" href="#">play</a> / <a onclick="pauseButton()" href="#">pause</a></p>
+      <p class="sliderP" id="speedP">speed</p>
+          <input type="range" min="1" max="100" value="70" class="slider" id="speedSlider" oninput="speedSliderChange()">
+      <p>~ ~ ~</p>
       <p>oct <a onclick="octDown()" href="#"> - </a>/<a onclick="octUp()" href="#"> + </a> </p>
       <p>step <a onclick="stepDown()" href="#"> - </a>/<a onclick="stepUp()" href="#"> + </a> </p>
       
-      <p>scale</p>
-          <p><input type="radio" name="scale" value=0 class="radio" onclick="scaleSelector(this)"> micro <br>
+      <p>scale:</p>
+      <select onchange="scaleSelector(this)" id="scale">
+        <option value="0">micro</option>
+        <option value="1">chromatic</option>
+        <option value="2" selected>diatonic</option>
+        <option value="3">wholetone</option>
+        <option value="4">pentatonic</option>
+        <option value="5">maj 7</option>
+        <option value="6">min 7</option>
+        <option value="7">fourths</option>
+        <option value="8">fifths</option>
+      </select>
+
+      <!-- <p>osc type:</p>
+      <select onchange="oscSelector(this)" id="scale">
+        <option value="sine">sin</option>
+        <option value="triangle" selected>tri</option>
+        <option value="sawtooth">saw</option>
+        <option value="square">square</option>
+      </select> -->
+
+          <!-- <p><input type="radio" name="scale" value=0 class="radio" onclick="scaleSelector(this)"> micro <br>
           <input type="radio" name="scale" value=1 class="radio" onclick="scaleSelector(this)"> chromatic <br> 
           <input type="radio" name="scale" value=2 class="radio" onclick="scaleSelector(this)" checked> diatonic <br> 
-          <input type="radio" name="scale" value=3 class="radio" onclick="scaleSelector(this)"> wholetone <br> </p>
+          <input type="radio" name="scale" value=3 class="radio" onclick="scaleSelector(this)"> wholetone <br> </p> -->
       
+     <div id="midiOptions">
+     </div>
       
 
       <div class="outro">

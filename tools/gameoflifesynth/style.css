@@ -207,6 +207,13 @@ select option {
   margin-top: 40px;
 }
 
+.cellcount {
+  display: block;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+}
+
 .controls {
   display: block;
   position: relative;

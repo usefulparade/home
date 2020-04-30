@@ -20,12 +20,13 @@
       <h1>game of life synth</h1>
     </div>
     <div class='game' id='game'></div>
+    <div class='cellcount'><p id='cellcount'>hi</p></div>
     <div class='controls'>
       <div class="sliders">
         <!-- <p class="sliderP" id="speedP">speed</p>
           <input type="range" min="1" max="100" value="30" class="slider" id="speedSlider" oninput="speedSliderChange()"> -->
-
-        <p>osc type:</p>
+        
+        <p>osc type</p>
         <select onchange="oscSelector(this)" id="scale">
           <option value="sine">sin</option>
           <option value="triangle" selected>tri</option>
@@ -43,15 +44,17 @@
           
       </div>
 
+      <p><a id="playbtn" onclick="playButton()" href="#">play</a></p>
       <p><a onclick="randomize()" href="#">randomize</a> / <a onclick="clearButton()" href="#">clear</a></p>
-      <p><a onclick="playButton()" href="#">play</a> / <a onclick="pauseButton()" href="#">pause</a></p>
       <p class="sliderP" id="speedP">speed</p>
           <input type="range" min="1" max="100" value="70" class="slider" id="speedSlider" oninput="speedSliderChange()">
       <p>~ ~ ~</p>
-      <p>oct <a onclick="octDown()" href="#"> - </a>/<a onclick="octUp()" href="#"> + </a> </p>
-      <p>step <a onclick="stepDown()" href="#"> - </a>/<a onclick="stepUp()" href="#"> + </a> </p>
+      <p class="sliderP">transpose</p>
+        <input type="range" min="0" max="24" value="12" class="slider" id="transposeSlider" oninput="transposeSliderChange()">
+      <!-- <p>oct <a onclick="octDown()" href="#"> - </a>/<a onclick="octUp()" href="#"> + </a> </p>
+      <p>step <a onclick="stepDown()" href="#"> - </a>/<a onclick="stepUp()" href="#"> + </a> </p> -->
       
-      <p>scale:</p>
+      <p>scale</p>
       <select onchange="scaleSelector(this)" id="scale">
         <option value="0">micro</option>
         <option value="1">chromatic</option>

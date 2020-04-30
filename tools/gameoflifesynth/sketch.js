@@ -17,6 +17,7 @@ var touchIsDown;
 var paused;
 var scaleVal, microInterval;
 var filter;
+var transposeSlider, noteOffset;
 
 var webMidiSupported;
 var clockCount;
@@ -24,8 +25,11 @@ var devices = [];
 var deviceLabel, deviceSelector, outputDevice, midiParent;
 var channelLabel, channelSelector, activeChannel;
 var clockCheckbox, startCheckbox;
+var playbtn;
+var cellCount, generation;
+var cellCountP;
 
-
+var circleStroke;
 
 WebMidi.enable(function(err) {
   if (err) {
@@ -42,6 +46,8 @@ function setup() {
 
   context = getAudioContext();
   context.suspend();
+
+  noteOffset = 0;
 
   scaleVal = 2;
 
@@ -138,6 +144,8 @@ function setup() {
   filterSlider = document.getElementById("filterSlider");
   filterSliderChange();
   // init();
+  transposeSlider = document.getElementById("transposeSlider");
+  transposeSliderChange();
 
   midiParent = document.getElementById('midiOptions');
 
@@ -185,21 +193,28 @@ function setup() {
     clockCheckbox.class("checkbox");
   }
 
-  
-
+  playbtn = document.getElementById("playbtn");
 
   context.suspend();
   touchIsDown = false;
   paused = true;
+
+  circleStroke = 255;
+  cellCount = 0;
+  generation = 0;
+  cellCountP = document.getElementById("cellcount");
+  cellCountP.innerHTML = "";
+
 }
 
 function draw() {
+
   background(15, 15, 19);
 
   if (frameCount%speed == 0){
     if (!paused){
       generate();
-      clockCount = 0;
+      // clockCount = 0;
     }
   }
 
@@ -221,6 +236,7 @@ function draw() {
         if (mouseIsPressed){
           if (board[i][j] == 0){
             board[i][j] = 1;
+            cellCount += 1;
             playVoice(i, j);
           }
         }
@@ -229,21 +245,23 @@ function draw() {
         if (touches[0] != null){
             if (touches[0].x > x-r && touches[0].x < x+r && touches[0].y > y-r && touches[0].y < y+r && board[i][j] != 1) {
             board[i][j] = 1;
+            cellCount += 1;
             playVoice(i, j);
           }
         }
       }
       
-      if ((board[i][j] == 1)) fill(255);
+      if ((board[i][j] == 1)) fill(circleStroke);
       else noFill();
       push();
-        stroke(255);
+        stroke(circleStroke);
         ellipse(i * w + w/2, j * w + w/2, w);
       pop();
 
     }
   }
 
+  cellCountDisplay();
 }
 
 function mousePressed() {
@@ -255,9 +273,12 @@ function mousePressed() {
 function randomize() {
   frameCount = 0;
   paused = false;
+  generation = 0;
 
   userStartAudio();
   getAudioContext().resume();
+
+  playbtn.innerHTML = "pause";
 
   for (let x = 0; x<rows;x++){
     for (let y = 0; y<columns, y++;){
@@ -272,15 +293,17 @@ function randomize() {
       if (board[i][j] == 1) playVoice(i, j);
     }
   }
-
-  if (clockCheckbox.checked()){
-    WebMidi.outputs[outputDevice].sendStart();
+  if (webMidiSupported){
+    if (clockCheckbox.checked()){
+      WebMidi.outputs[outputDevice].sendStart();
+    }
   }
 }
 
 // clear the board
 function clearButton() {
   frameCount = 0;
+  
 
   for (let i = 0; i < columns; i++) {
     for (let j = 0; j < rows; j++) {
@@ -289,24 +312,39 @@ function clearButton() {
     }
   }
 
+  generate();
+  generation = 0;
+
+
+  playbtn.innerHTML = "play";
+  paused = true;
+
   for (let x = 0; x<rows;x++){
     for (let y = 0; y<columns, y++;){
       synths[x][y].releaseVoice();
     }
   }
 
-  if (clockCheckbox.checked()){
-    WebMidi.outputs[outputDevice].sendStop();
+  if (webMidiSupported){
+      WebMidi.outputs[outputDevice].sendStop();
   }
 }
 
 // The process of creating the new generation
 function generate() {
+  clockCount = 0;
+  cellCount = 0;
+  generation++;
 
-  
   // Loop through every spot in our 2D array and check spots neighbors
   for (let x = 0; x < columns; x++) {
     for (let y = 0; y < rows; y++) {
+
+      // get cell count
+      if (board[x][y] == 1){
+        cellCount += 1;
+      }
+
       // Add up all the states in a 3x3 surrounding grid
       let neighbors = 0;
       for (let i = -1; i <= 1; i++) {
@@ -322,6 +360,7 @@ function generate() {
       else if ((board[x][y] == 1) && (neighbors >  3)) next[x][y] = 0;           // Overpopulation
       else if ((board[x][y] == 0) && (neighbors == 3)) next[x][y] = 1;           // Reproduction
       else                                             next[x][y] = board[x][y]; // Stasis
+    
     }
   }
 
@@ -329,11 +368,11 @@ function generate() {
   //play the sounds!
   for (let x2 = 0; x2 < columns; x2++) {
     for (let y2 = 0; y2 < rows; y2++) {
+
       
-      if      ((board[x2][y2] == 0) && (next[x2][y2] == 0)) releaseVoice(x2, y2);                         // 0 to 0, no change, no voice
+      if      ((board[x2][y2] == 0) && (next[x2][y2] == 0)) releaseVoice(x2, y2);     // 0 to 0, no change, no voice
       else if ((board[x2][y2] == 0) && (next[x2][y2] == 1)) playVoice(x2, y2);        // 0 to 1, play a note!
       else if ((board[x2][y2] == 1) && (next[x2][y2] == 0)) releaseVoice(x2, y2);     // 1 to 0, release a note!
-      
       else if ((board[x2][y2] == 1) && (next[x2][y2] == 1)) ;                         // 1 to 1, no change, keep playing
       else                                                  ;                         // shouldn't come to this but w/e!
     }
@@ -365,9 +404,9 @@ function playVoice(x, y){
 
   if (webMidiSupported && scaleVal != 0){
     if (activeChannel != "r"){
-      WebMidi.outputs[outputDevice].playNote(notes[x+(rows-y-1)], activeChannel);
+      WebMidi.outputs[outputDevice].playNote(notes[x+(rows-y-1)] + noteOffset, activeChannel);
     } else {
-      WebMidi.outputs[2].playNote(notes[x+(rows-y-1)], rows-y);
+      WebMidi.outputs[outputDevice].playNote(notes[x+(rows-y-1)] + noteOffset, rows-y);
     }
   }
 }
@@ -387,7 +426,7 @@ function releaseVoice(x, y){
 }
 
 function speedSliderChange(){
-  speed = floor(100-speedSlider.value);
+  speed = floor(101-speedSlider.value);
 }
 
 function volumeSliderChange(){
@@ -458,26 +497,52 @@ function filterSliderChange(){
   filter.freq(frequency);
 }
 
-function remapNotes(){
-  for (i=0;i<notes.length;i++){
-    while (notes[i] > 127){
-      notes[i] -= 12;
-    }
-    
-    while (notes[i] < 0){
-      notes[i] += 12;
-    }
+function transposeSliderChange(){
+  if (webMidiSupported && generation > 0){
+    WebMidi.outputs[outputDevice].sendStop();
   }
+  if (scaleVal == 0){
+    if (transposeSlider.value <= 12){
+      noteOffset = map(transposeSlider.value, 0, 12, 0.5, 1);
+    } else if (transposeSlider.value > 12){
+      noteOffset = map(transposeSlider.value, 12, 24, 1, 2);
+    } else {
+      noteOffset = 1;
+    }
+  } else {
+    noteOffset = map(transposeSlider.value, 0, 24, -12, 12);
+  }
+  remapNotes();
+
+  
+  
+}
+
+function remapNotes(){
+
+
   if (scaleVal != 0){
+
+    for (i=0;i<notes.length;i++){
+      while (notes[i] > 127){
+        notes[i] -= 12;
+      }
+      
+      while (notes[i] < 0){
+        notes[i] += 12;
+      }
+    }
+
     for (i=0;i<columns;i++){
       for (j=0;j<rows;j++){
-        synths[i][j].freq(midiToFreq(notes[i+(rows-j-1)]) + (random(-1, 1)*pitchSpread));
+        synths[i][j].freq(midiToFreq(notes[i+(rows-j-1)] + noteOffset) + (random(-1, 1)*pitchSpread));
       }
     }
   } else {
     for (i=0;i<columns;i++){
       for (j=0;j<rows;j++){
-        synths[i][j].freq(notes[i+(rows-j-1)]) + (random(-1, 1)*(pitchSpread));
+        // synths[i][j].freq(notes[i+(rows-j-1)] + (random(-1, 1)*pitchSpread));
+        synths[i][j].freq(notes[i+(rows-j-1)]*noteOffset);
       }
     }
   }
@@ -503,33 +568,44 @@ function touchEnded(){
 }
 
 function playButton(){
-  paused = false;
-  frameCount = 0;
 
-  userStartAudio();
-  getAudioContext().resume();
+  if (paused){
+    paused = false;
+    frameCount = 0;
 
-  for (let x = 0; x<rows;x++){
-    for (let y = 0; y<columns, y++;){
-      synths[x][y].releaseVoice();
+
+    playbtn.innerHTML = "pause";
+    userStartAudio();
+    getAudioContext().resume();
+
+    for (let x = 0; x<rows;x++){
+      for (let y = 0; y<columns, y++;){
+        synths[x][y].releaseVoice();
+      }
     }
-  }
-  
-  for (let i = 0; i < columns; i++) {
-    for (let j = 0; j < rows; j++) {
-      board[i][j] = board[i][j];
-      next[i][j] = 0;
-      if (board[i][j] == 1) playVoice(i, j);
+    
+    for (let i = 0; i < columns; i++) {
+      for (let j = 0; j < rows; j++) {
+        board[i][j] = board[i][j];
+        next[i][j] = 0;
+        if (board[i][j] == 1) playVoice(i, j);
+      }
     }
-  }
-  if (clockCheckbox.checked()){
-    WebMidi.outputs[outputDevice].sendStart();
+    if (webMidiSupported){
+      if (clockCheckbox.checked()){
+        WebMidi.outputs[outputDevice].sendStart();
+      }
+    }
+  } else {
+    paused = true;
+    playbtn.innerHTML = "play";
   }
 
 }
 
 function pauseButton(){
   paused = true;
+  playbtn.innerHTML = "play";
 }
 
 function scaleSelector(scaleRadio){
@@ -539,6 +615,7 @@ function scaleSelector(scaleRadio){
   var newNotes = [];
 
   if (scaleVal == 0){
+    noteOffset = 1;
    makeMicroNotes();
       
   } else if (scaleVal == 1){
@@ -612,6 +689,7 @@ function makeMicroNotes(){
   microInterval = 1.0293;
   for (i=1;i<notes.length;i++){
     notes[i] = notes[i-1]*microInterval;
+    console.log(notes[i]);
   }
 }
 
@@ -649,4 +727,9 @@ function sendMidiClock(){
   }
   clockCount++;
 
+}
+
+function cellCountDisplay() {
+    var text = "" + cellCount + " living cells" + " ~ " + generation + " generations";
+    cellCountP.innerHTML = text;
 }

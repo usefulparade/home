@@ -5,14 +5,11 @@
 
 :root {
     /* bg */
-    --color1: #eeddbe;
-    /* link */
-    --color2: #11000f;
+    --color1: #4d97b1;
     /* link mouseover */
-    --color3: #a27e8e;
-    /* --color3: #2068b5; */
+    --color3: #FED766;
     /* text */
-    --color4: #323c03;
+    --color4: #3c345e;
 }
 
 body {
@@ -21,28 +18,28 @@ body {
     margin: 0px;
     color: var(--color4);
     background-color: var(--color1);
-    user-select: none;
+    /* user-select: none; */
     webkit-user-select: none;
-    /* filter: blur(0.4px); */
+    /* filter: blur(0.2px); */
 }
 
 h1 {
     display: inline-block;
     font-weight: normal;
-    font-size: 2em;
+    font-size: 1em;
     margin: 0px;
-    margin-bottom: 60px;
+    /* margin-bottom: 60px; */
 }
 
 h2 {
     font-weight: normal;
-    font-size: 4em;
+    font-size: 2em;
     margin-top: 10px;
 }
 
 h3 {
     font-weight: normal;
-    font-size: 4em;
+    font-size: 2em;
     margin: 0px;
 }
 
@@ -63,13 +60,18 @@ a {
     text-decoration: none;
     padding-right: 5px;
     padding-left: 5px;
-    transition: background-color 0.2s;
+    transition: background-color 0.5s, border-radius 0.5s, filter 0.5s;
+    border-radius: 3px;
+    filter: blur(0px);
+    
     /* filter: blur(0.5px); */
 }
 
 a:hover {
     background-color: var(--color3);
     color: var(--color1);
+    border-radius: 6px;
+    filter: blur(2px);
 }
 
 a img {
@@ -126,7 +128,10 @@ select {
     bottom: 0;
     width: 100vw;
     height: 100vh;
-    padding: 3vw;
+    padding-left: 10vw;
+    padding-right: 10vw;
+    padding-top: 5vh;
+    padding-bottom: 5vh;
 }
 
 @media only screen and (max-width: 720px){

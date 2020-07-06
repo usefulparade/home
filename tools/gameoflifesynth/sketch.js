@@ -115,7 +115,7 @@ function setup() {
       
       synths[j][k].start();
 
-      envelopes[j][k] = new p5.Envelope()
+      envelopes[j][k] = new p5.Envelope();
       envelopes[j][k].setADSR(0.005, 0.5, 0.07, 0.01);
       envelopes[j][k].setRange(0.5, 0);
       synths[j][k].amp(envelopes[j][k]);

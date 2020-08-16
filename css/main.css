@@ -7,15 +7,20 @@
     /* bg */
     --color1: #4d97b1;
     /* link mouseover */
-    --color3: #FED766;
+    --color3: #fed766;
+
     /* text */
     --color4: #3c345e;
+
+    --color5: rgb(254, 102, 102);
+    --color6: rgb(229, 244, 239);
 }
 
 body {
     font-family: 'Easley', Courier, monospace;
     font-size: 22px;
     margin: 0px;
+    padding: 0px;
     color: var(--color4);
     background-color: var(--color1);
     /* user-select: none; */
@@ -132,6 +137,13 @@ select {
     padding-right: 10vw;
     padding-top: 5vh;
     padding-bottom: 5vh;
+}
+
+.bg {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
 }
 
 @media only screen and (max-width: 720px){

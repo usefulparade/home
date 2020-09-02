@@ -30,7 +30,8 @@
           strokeWeight(2);
           beginShape(LINES);
             for(i=0;i<vertices.length;i++){
-              vertex(vertices[i].x, vertices[i].y);
+              
+                vertex(vertices[i].x, vertices[i].y);
             }
           endShape();
         pop();
@@ -38,8 +39,19 @@
         if (mouseX != 0 && mouseY != 0){
               // ellipse(mouseX, mouseY, 10, 10);
               // vertex(mouseX, mouseY);
-              vertices.push(new p5.Vector(mouseX, mouseY));
+              if (!mouseIsPressed){
+                vertices.push(new p5.Vector(mouseX, mouseY, 1));
+              } else {
+                vertices.push(new p5.Vector(mouseX, mouseY, 0));
+              }
             }
+      }
+
+      function mouseClicked(){
+        noFill();
+        stroke(col);
+        strokeWeight(2);
+        ellipse(mouseX, mouseY, 100, 100);
       }
 
       function makeShape(){

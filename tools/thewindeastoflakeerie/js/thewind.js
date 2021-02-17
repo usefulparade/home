@@ -31,7 +31,7 @@ var combinedWindSpeed = 0;
 var windDampener = 5; // this val is less than gravity bc it needs to be a bit exaggerated
 
 function windUpdate(){
-    var base = "https://tidesandcurrents.noaa.gov/api/datagetter?";
+    var base = "https://thingproxy.freeboard.io/fetch/https://tidesandcurrents.noaa.gov/api/datagetter?";
     var options = "date=recent&station=9063020&datum=LWD&product=wind&units=metric&time_zone=lst_ldt&application=ports_screen&format=json";
     var url = base + options;
     console.log(url);
@@ -59,6 +59,7 @@ function windUpdate(){
             dirP.innerHTML = "from: " + simpleDir;
 
         } else {
+            console.log(request.status);
         }
 
     };
@@ -141,10 +142,13 @@ World.add(world, rope);
 Events.on(engine, "beforeUpdate", function(){
 
     noiseVal = noiseGen();
-    baseSpeed = windData.data[dataLength].s;
-    gustSpeed = windData.data[dataLength].g;
-    // baseSpeed = 50;
-    // gustSpeed = 70;
+    if (windData.data != null){
+        baseSpeed = windData.data[dataLength].s;
+        gustSpeed = windData.data[dataLength].g;
+    } else {
+        baseSpeed = 50;
+        gustSpeed = 70;
+    }
     diffSpeed = gustSpeed - baseSpeed;
 
     if (dataReady){

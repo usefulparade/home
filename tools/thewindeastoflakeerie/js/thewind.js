@@ -31,8 +31,8 @@ var combinedWindSpeed = 0;
 var windDampener = 5; // this val is less than gravity bc it needs to be a bit exaggerated
 
 function windUpdate(){
-    var base = "https://thingproxy.freeboard.io/fetch/https://tidesandcurrents.noaa.gov/api/datagetter?";
-    var options = "date=recent&station=9063020&datum=LWD&product=wind&units=metric&time_zone=lst_ldt&application=ports_screen&format=json";
+    var base = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?";
+    var options = "date=recent&station=9063020&datum=LWD&product=wind&units=metric&time_zone=lst_ldt&application=usefulparade&format=json";
     var url = base + options;
     console.log(url);
     var request = new XMLHttpRequest();
@@ -40,7 +40,7 @@ function windUpdate(){
         model : "default",
     };
 
-    request.open('GET', url, true);
+    request.open('POST', url, true);
     request.send(JSON.stringify(data));
 
     request.onreadystatechange = function(){
@@ -154,10 +154,10 @@ Events.on(engine, "beforeUpdate", function(){
     if (dataReady){
         if (noiseVal >= 0.8){
             // if noise gets above 0.8, make a gust!
-           combinedWindSpeed = noiseVal*(gustSpeed);
+           combinedWindSpeed = noiseVal*(gustSpeed*1.5);
         } else if (noiseVal < 0.8 && noiseVal > 0){
             // otherwise, if it's positive, just be windy
-            combinedWindSpeed = noiseVal*(baseSpeed);
+            combinedWindSpeed = noiseVal*(baseSpeed*1.5);
         } else {
             // when noise is negative, give us a lull
             combinedWindSpeed = noiseVal*(diffSpeed*0.5);

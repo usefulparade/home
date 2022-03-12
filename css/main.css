@@ -1,16 +1,22 @@
 @font-face {
     font-family: "Easley";
-    src: url("/font/Easley-Regular.otf");
+    src: url("/font/ease-reg.otf");
+}
+
+@font-face {
+    font-family: "Body";
+    src: url("/font/edit-thin-italic.otf");
 }
 
 :root {
     /* bg */
-    --color1: #4d97b1;
+    --color1: rgb(77, 151, 177);
     /* link mouseover */
     --color3: #fed766;
 
     /* text */
     --color4: #3c345e;
+    /* --color4: #2e4d35; */
 
     --color5: rgb(254, 102, 102);
     --color6: rgb(229, 244, 239);
@@ -36,7 +42,7 @@ body:active {
 h1 {
     display: inline-block;
     font-weight: normal;
-    font-size: 1em;
+    font-size: 2em;
     margin: 0px;
     /* margin-bottom: 60px; */
 }
@@ -52,8 +58,9 @@ h2 {
 }
 
 h3 {
+    font-family: "Body";
     font-weight: normal;
-    font-size: 2em;
+    font-size: 5em;
     margin: 0px;
 }
 
@@ -68,17 +75,20 @@ small {
 }
 
 a {
-    
+    /* font-family: "Body"; */
+    /* text-transform:uppercase; */
     color: var(--color1);
     background-color: var(--color4);
+    /* border-bottom: 5px solid var(--color4); */
     text-decoration: none;
+    padding-top: 5px;
     padding-right: 5px;
     padding-left: 5px;
+    /* margin-right: 5px;
+    margin-left: 5px; */
     transition: background-color 0.5s, border-radius 0.5s, filter 0.5s;
     border-radius: 3px;
     filter: blur(0px);
-    
-    /* filter: blur(0.5px); */
 }
 
 a:hover {
@@ -86,6 +96,71 @@ a:hover {
     color: var(--color1);
     border-radius: 6px;
     filter: blur(2px);
+}
+
+span.blank {
+    font-family: "Body";
+    display: inline-block;
+    position: relative;
+    color: var(--color4);
+    /* background-color: var(--color1); */
+    border: 2px solid transparent;
+    border-bottom: 2px solid var(--color4);
+    transition: color 0.4s, background-color 0.4s;
+    padding: 10px;
+    caret-color: var(--color3);
+    min-width: 20px;
+    min-height: 40px;
+
+    white-space: pre-wrap;
+    /* border-radius: 3px; */
+}
+
+span.blank br {
+    display: none;
+}
+
+span.blank::after {
+    content: "";
+    animation-name: blinker;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(1,0,0,1);
+    animation-duration: 1s;
+    display: inline-block;
+    width: 1px;
+    height: 50px;
+    margin-left: 5px;
+    margin-bottom: -0.225em;
+    border-radius: 3px;
+    /* box-shadow: 0 0 10px rgba(white,.3); */
+    background-color: var(--color4);
+}
+
+span.blank:hover {
+    /* color: var(--color5); */
+    border-top: 2px dashed var(--color3);
+    border-left: 2px dashed var(--color3);
+    border-right: 2px dashed var(--color3);
+    cursor:text;
+}
+
+span.blank:focus {
+    color: var(--color1);
+    background-color: var(--color3);
+}
+
+
+span.blank:hover::after{
+    background-color: var(--color4);
+}
+
+span.blank:focus::after {
+    background-color: var(--color1);
+}
+
+span.blank:visited {
+    color: var(--color4);
+    /* cursor:text; */
 }
 
 a img {
@@ -102,6 +177,27 @@ span {
 
 i {
     font-size: 2em;
+}
+
+button {
+    font-family: "Easley";
+    color: var(--color1);
+    background-color: var(--color4);
+    font-size: 0.5em;
+    width: 40px;
+    height: 40px;   
+    /* background-color: transparent; */
+    border: 2px solid var(--color4);
+    border-radius: 3px;
+}
+
+button:hover {
+    background-color: var(--color3);
+    filter:blur(0.5px);
+}
+
+button:visited {
+    background-color: transparent;
 }
 
 select {
@@ -148,6 +244,21 @@ select {
     padding-bottom: 5vh;
 }
 
+.texture {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url("/img/photocopy1.jpg");
+    background-size: cover;
+    z-index: 100;
+    filter: opacity(0.5);
+    mix-blend-mode:overlay;
+    pointer-events: none;
+  }
+
 .bg {
     display: block;
     position: fixed;
@@ -155,6 +266,10 @@ select {
     left: 0;
     transition: filter 0.5s;
 }
+
+.blinker { 
+    
+  }
 
 @media only screen and (max-width: 720px){
     body {
@@ -170,13 +285,13 @@ select {
     
     h2 {
         font-weight: lighter;
-        font-size: 2em;
+        font-size: 1.5em;
         margin-top: 10px;
     }
 
     h3 {
         font-weight: lighter;
-        font-size: 2em;
+        font-size: 3em;
         margin-top: 10px;
     }
 
@@ -187,4 +302,23 @@ select {
     #bottom-logo {
         max-width: 80px;
     }
+
+    span.blank::after {
+        height: 40px;
+    }
 }
+
+
+@keyframes textedit{
+    from {
+      border-right: 5px solid var(--color3);
+    }
+  
+    to {
+        border-right: 5px solid var(--color3);
+    }
+  }
+  
+  @keyframes blinker { 
+    from { opacity: 1.0; } to { opacity: 0.0; }
+  }

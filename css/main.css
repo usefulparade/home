@@ -10,7 +10,7 @@
 
 :root {
     /* bg */
-    --color1: rgb(77, 151, 177);
+    --color1: #4d97b1;
     /* link mouseover */
     --color3: #fed766;
 
@@ -64,6 +64,10 @@ h3 {
     margin: 0px;
 }
 
+h4 {
+    font-size: 1em;
+}
+
 
 p {
     font-weight: normal;
@@ -81,7 +85,7 @@ a {
     background-color: var(--color4);
     /* border-bottom: 5px solid var(--color4); */
     text-decoration: none;
-    padding-top: 5px;
+    padding-top: 0.1em;
     padding-right: 5px;
     padding-left: 5px;
     /* margin-right: 5px;
@@ -212,7 +216,7 @@ select {
     max-width: 120px;
 }
 
-#bottom-logo {
+.bottom-logo {
     display: block;
     position: fixed;
     right: 20px;
@@ -285,7 +289,7 @@ select {
     
     h2 {
         font-weight: lighter;
-        font-size: 1.5em;
+        font-size: 1em;
         margin-top: 10px;
     }
 
@@ -295,16 +299,25 @@ select {
         margin-top: 10px;
     }
 
+    h4 {
+        font-size: 0.5em;
+    }
+
     small {
         font-size: 1em;
     }
 
-    #bottom-logo {
+    .bottom-logo {
+        
         max-width: 80px;
     }
 
+    span.blank {
+        padding-bottom: 0em;
+    }
+
     span.blank::after {
-        height: 40px;
+        height: 30px;
     }
 }
 

@@ -6,6 +6,8 @@ var circlePoints = [];
 
 var mode;
 
+p5.disableFriendlyErrors = true; // disables FES
+
 function setup(){
 
   c = createCanvas(windowWidth, windowHeight);
@@ -24,11 +26,12 @@ function draw(){
   
   clear();
   push();
+    translate(width*0.5, height*0.5);
     fill(col);
     noStroke();
     beginShape();
       for (j=0;j<shapePoints.length;j++){
-          vertex(width*shapePoints[j].x, height*shapePoints[j].y);
+          vertex(width*shapePoints[j].x*0.5, height*shapePoints[j].y*0.5);
       }
     endShape(CLOSE);
   pop();
@@ -36,19 +39,30 @@ function draw(){
   push();
     noFill();
     stroke(col);
-    
     if (mode == 0){
       strokeWeight(10);
       beginShape(POINTS);
+          for(i=0;i<vertices.length;i++){
+            
+            vertex(vertices[i].x, vertices[i].y);
+        }
+      endShape();
+      //   strokeWeight(1);
+      // beginShape();
+      //     for(i=0;i<vertices.length;i++){
+            
+      //       vertex(vertices[i].x, vertices[i].y);
+      //   }
+      // endShape();
     } else if (mode==1){
       strokeWeight(2);
-      beginShape(LINES);
+      beginShape();
+          for(i=0;i<vertices.length;i++){
+            
+            vertex(vertices[i].x, vertices[i].y);
+        }
+      endShape();
     }
-      for(i=0;i<vertices.length;i++){
-        
-          vertex(vertices[i].x, vertices[i].y);
-      }
-    endShape();
   pop();
 
   if (mouseX != 0 && mouseY != 0){
@@ -62,17 +76,33 @@ function draw(){
   }
 
   for (i=0;i<circlePoints.length;i++){
-    noFill();
+    var s;
+    fill(col);
     stroke(col);
     strokeWeight(2);
-    ellipse(circlePoints[i].x, circlePoints[i].y, 50, 50);
+    if (mode == 1){
+      s = 50;
+    } else {
+      s = 100;
+    }
+    ellipse(circlePoints[i].x, circlePoints[i].y, s, s);
     // circlePoints[i].add(new p5.Vector(random(-0.3, 0.3),random(0.5,1)));
   }
 
-  while (vertices.length > 200){
-    vertices.shift();
-    if (mode==1){ // in lines mode, have to get rid of 2 every time to avoid flickering
+  if (circlePoints.length > 1){
+    if (mode==1){
+      circlePoints.shift();
+    }
+  }
+
+  if (vertices.length > 200){
+    if (mode!=1){ // in lines mode (mobile), don't get rid of old vertices
+      if (circlePoints.includes(p5.Vector(vertices[0].x, vertices[0].y))){
+        circlePoints.shift();
+      }
       vertices.shift();
+      
+    } else {
     }
   }
 
@@ -89,11 +119,15 @@ function mousePressed(){
   // mode = (mode+1)%2;
 }
 
+function touchStarted(){
+  mode = 1;
+}
+
 function makeShape(){
   shapePoints[0] = new p5.Vector(random(0.4, 0.5), 1);
   shapePoints[1] = new p5.Vector(random(0.6, 0.7), random(0.6, 0.7));
   shapePoints[2] = new p5.Vector(random(0.8, 0.9), random(0.4, 0.5));
-  shapePoints[3] = new p5.Vector(1, random(0.4, 0.5));
+  shapePoints[3] = new p5.Vector(1, random(0.35, 0.45));
   shapePoints[4] = new p5.Vector(1, 1);
 }
 

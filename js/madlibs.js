@@ -30,6 +30,8 @@ var corpusSites = [
 var blanks = [];
 var randoms = [];
 
+p5.disableFriendlyErrors = true; // disables FES
+
 function blanksSetup(){
 
 
